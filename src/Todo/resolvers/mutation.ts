@@ -1,6 +1,7 @@
 import { Resolver, Mutation, Arg, Query } from 'type-graphql';
 
 import { Todo } from "../types/todo";
+import { todos} from '../../db/todo-data'
 
 @Resolver()
 export class MutationResolver {
@@ -12,7 +13,7 @@ export class MutationResolver {
   @Mutation(returns => Todo)
   addTodo(@Arg('text') text: string) {
     const todo: Todo = {
-      id: (this.todos.length + 1).toString(),
+      id: (todos.length + 1).toString(),
       text,
       completed: false,
     };
@@ -26,7 +27,7 @@ export class MutationResolver {
     @Arg('text', { nullable: true }) text?: string,
     @Arg('completed', { nullable: true }) completed?: boolean,
   ) {
-    const todoIndex = this.todos.findIndex(todo => todo.id === id);
+    const todoIndex = todos.findIndex(todo => todo.id === id);
     if (todoIndex === -1) {
       throw new Error('Todo not found');
     }
@@ -43,7 +44,7 @@ export class MutationResolver {
 
   @Mutation(returns => Boolean)
   deleteTodo(@Arg('id') id: string) {
-    const todoIndex = this.todos.findIndex(todo => todo.id === id);
+    const todoIndex = todos.findIndex(todo => todo.id === id);
     if (todoIndex === -1) {
       throw new Error('Todo not found');
     }

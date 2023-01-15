@@ -1,19 +1,19 @@
-import Express from 'express';
+
 import 'reflect-metadata';
 import { buildSchema, NextFn, ResolverData } from 'type-graphql';
 // import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import { MutationResolver } from './Todo/resolvers/mutation';
 import { QueryResolver } from './Todo/resolvers/query';
+
 import * as dotenv from 'dotenv';
+
 import { getUser } from './Auth/resolvers/jwt-auth';
 import jwt, { verify } from 'jsonwebtoken';
-import { Response, Request } from 'express';
-import { ApolloServer } from 'apollo-server';
-interface Context  {
-  res: Response;
 
-  req: {userId:number} &  Request
-} 
+
+import { ApolloServer } from 'apollo-server';
+import { Context } from './interfaces/common';
+
 
 dotenv.config();
 const SECRET = 'secretkey';
@@ -54,9 +54,10 @@ const main = async () => {2
 
   const server = new ApolloServer({
     schema,
-    context: async ({ req, res }) => {
+    context: async ({ req, res }):Promise<Context> => {
       // get the user token from the headers
-      const user = await getUser(req);
+      // const user = await getUser(req);
+      const user  = {userId:'3489slkjlgd'};
       return { user, req, res };
     },
   });
